@@ -73,3 +73,14 @@ def delete_appointment(query: AppointmentIdSchema):
     connection.commit()
     connection.close()
     return 'Agendamento deletado com sucesso!'
+
+@app.put('/agendamentos', tags=[agendamentos_tag])
+def update_appointment(query: AppointmentIdSchema, body: AppointmentSchema):
+    """Atualizar agendamento.
+    """
+    connection = sqlite3.connect(DB_NAME)
+    cursor = connection.cursor()
+    cursor.execute("UPDATE agendamentos SET start_time = ?, doctor_id = ?, patient_id = ? WHERE id = ?", (body.start_time, body.doctor_id, body.patient_id, query.id))
+    connection.commit()
+    connection.close()
+    return 'Agendamento atualizado com sucesso!'
