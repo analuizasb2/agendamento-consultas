@@ -1,7 +1,6 @@
 from flask import request, redirect, jsonify
 from flask_openapi3 import OpenAPI, Info, Tag
-from pydantic import BaseModel, validator
-from datetime import datetime
+from pydantic import BaseModel
 import sqlite3
 
 info = Info(title="Agendamento de Consultas", version="1.0.0")
@@ -14,15 +13,6 @@ class AppointmentSchema(BaseModel):
     start_time: str
     doctor_id: int
     patient_id: int
-    
-    @validator('start_time')
-    def check_start_time_format(cls, value):
-        try:
-            # Attempt to parse the datetime to ensure it's in the correct format
-            datetime.strptime(value, '%Y-%m-%d %H:%M')
-        except ValueError:
-            raise ValueError('start_time must be in the format YYYY-MM-DD HH:MM')
-        return value
     
 class AppointmentIdSchema(BaseModel):
     id: int
